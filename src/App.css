@@ -1,0 +1,60 @@
+:root {
+    --bg: #060611;
+    --text: #dbdbdb;
+}
+
+.otime {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--bg);
+    color: var(--text);
+    padding: 30px 65px;
+}
+
+.otime main {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.otime main .time {
+    margin-bottom: 40px;
+}
+
+.otime main .time .hours,
+.otime main .time .minutes,
+.otime main .time .seconds {
+    font-size: 65px;
+}
+
+.otime main .time .millisecond {
+    font-size: 30px;
+}
+
+.otime main .time .space {
+    font-size: 102px;
+    letter-spacing: 0;
+}
+
+.otime main .control {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.otime main .control .play,
+.otime main .control .operation {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    margin: 0 10px;
+    border: none;
+}
+
+.otime main .control .play img,
+.otime main .control .operation img {
+    width: 30px;
+}
