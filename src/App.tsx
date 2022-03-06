@@ -1,14 +1,61 @@
 import { useEffect, useState } from "react";
 
 import "./App.css";
-import flag from "./flag.svg";
 import pause from "./pause-button.svg";
 import play from "./play.svg";
 import stop from "./stop.svg";
 
+type List = {
+  lable: string | undefined;
+  timespan:
+    | {
+        start: string | undefined;
+        end: string | undefined;
+      }
+    | undefined;
+  timeperiod: string | undefined;
+}[];
+
 function App() {
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(false);
+  const [list, setList] = useState<List | undefined>([]);
+
+  const addList = (val: List): void => {
+    setList((prevList) => [...prevList!, ...val]);
+  };
+
+  const setEnd = (): void => {
+    const index = list!.length - 1
+    const timeString = `${("0" + Math.floor((time / 3600000) % 60)).slice(-2)}:${("0" + Math.floor((time / 60000) % 60)).slice(-2)}:${("0" + Math.floor((time / 1000) % 60)).slice(-2)}`
+
+    list!.length !== 0 &&
+      setList((prevList) => {
+        const newList = prevList;
+        newList![index].timespan!.end = getDate();
+        newList![index].timeperiod = timeString;
+        return [...newList!];
+      });
+  };
+
+  const setLable = (index: number, lable: string): void => {
+    setList((prevList) => {
+      const newList = prevList;
+      newList![index].lable = lable;
+      return [...newList!];
+    });
+  };
+
+  const reset = (): void => {
+    setTime(0)
+    setRunning(false)
+    setList([])
+  }
+
+  const getDate = (): string => {
+    const now = new Date();
+    return `${now.getHours()}:${now.getMinutes()}`;
+  };
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> = 0;
@@ -17,8 +64,23 @@ function App() {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 10);
       }, 10);
+
+      const now: string = getDate();
+      addList([
+        {
+          lable: "",
+          timespan: {
+            start: now,
+            end: "...",
+          },
+          timeperiod: "...",
+        },
+      ]);
     } else if (!running) {
       clearInterval(interval);
+
+      const now: string = getDate();
+      setEnd();
     }
 
     return () => clearInterval(interval);
@@ -26,7 +88,7 @@ function App() {
 
   useEffect(() => {
     window.addEventListener("keydown", (e: KeyboardEvent): void => {
-      if (e.code === "Space") {
+      if (e.code === "Escape") {
         setRunning((preRunning) => !preRunning);
       }
     });
@@ -52,7 +114,7 @@ function App() {
 
         <div className="control">
           <button
-          className="play"
+            className="play"
             onClick={() => setRunning((preRunning) => !preRunning)}
           >
             <img
@@ -61,16 +123,38 @@ function App() {
             />
           </button>
           <button
-          className="operation"
+            className="operation"
             onClick={() => {
-              running ? alert("flag") : confirm("R u sure?") && setTime(0);
+              confirm("R u sure?") && reset();
             }}
           >
-            <img
-              src={running ? flag : stop}
-              alt={running ? "flag" : "stop"}
-            />
+            <img src={stop} alt={"stop"} />
           </button>
+        </div>
+
+        <div className="list">
+          {list!.length !== 0 &&
+            list!.map((value, index) => (
+              <div className="item" key={index}>
+                <span className="order">{index + 1}</span>
+                <span className="lable">
+                  <input
+                    type="text"
+                    id="lable-1"
+                    defaultValue={value.lable}
+                    onChange={(e) => setLable(index, e.target.value)}
+                  />
+                </span>
+                <div className="timespan">
+                  <span className="timespan-start">
+                    {value.timespan!.start}
+                  </span>
+                  <span>{" to "}</span>
+                  <span className="timespan-end">{value.timespan!.end}</span>
+                </div>
+                <span className="timeperiod">{value.timeperiod}</span>
+              </div>
+            ))}
         </div>
       </main>
     </div>
