@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from 'axios'
 
 import "./App.css";
 import pause from "./pause-button.svg";
@@ -20,6 +21,7 @@ function App() {
   const [time, setTime] = useState(0);
   const [running, setRunning] = useState(false);
   const [list, setList] = useState<List | undefined>([]);
+  const [loading, setLoading] = useState(false)
 
   const addList = (val: List): void => {
     setList((prevList) => [...prevList!, ...val]);
@@ -56,6 +58,14 @@ function App() {
     const now = new Date();
     return `${now.getHours()}:${now.getMinutes()}`;
   };
+
+  const fetchData = async (type: 'json' | 'csv'): Promise<void> => {
+    setLoading(true)
+    const res = await axios.post(`http://localhost:3001/${type}`, { list });
+    if (res.status === 200) {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> = 0;
@@ -133,6 +143,15 @@ function App() {
         </div>
 
         <div className="list">
+          <div className="export">
+            <button className="json" onClick={() => fetchData("json")}>
+              JSON
+            </button>
+            <button className="csv" onClick={() => fetchData("csv")}
+            disabled={loading}>
+              CSV
+            </button>
+          </div>
           {list!.length !== 0 &&
             list!.map((value, index) => (
               <div className="item" key={index}>
