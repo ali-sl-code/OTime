@@ -2,7 +2,7 @@
 
 OTime is a browser stopwatch!
 
-<span align="center"><img src="/assets/images/otime.png" alt="otime image" width="200"/></span>
+<p align="center"><img src="/assets/images/otime.png" alt="otime image" width="400"/></p>
 
 ## Installation
 
