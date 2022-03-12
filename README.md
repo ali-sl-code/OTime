@@ -2,6 +2,8 @@
 
 OTime is a browser stopwatch!
 
+<span align="center">![](/assets/images/otime.png)</span>
+
 ## Installation
 
 Clone repository OTime.
@@ -27,6 +29,8 @@ npm run dev # Run project in localhost and port 3000
 ### Export
 
 Run the server to output JSON and CSV
+
+<span align="center">![](/assets/images/exports.png)</span>
 
 ```bash
 npm run server
