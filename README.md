@@ -3,6 +3,7 @@
 OTime is a browser stopwatch!
 
 <p align="center"><img src="/assets/images/otime.png" alt="otime image" width="300"/></p>
+<small>Tip: the best size for display is 500px</small>
 
 ## Installation
 
